@@ -34,6 +34,18 @@
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.BloodyGoodGPA.NoActionBar" />
         <activity
+            android:name=".RegisterCode"
+            android:label="RegisterCode"
+            android:theme="@style/Theme.BloodyGoodGPA.NoActionBar" />
+        <activity
+            android:name=".ManageEvents"
+            android:label="ManageEvents"
+            android:theme="@style/Theme.BloodyGoodGPA.NoActionBar" />
+        <activity
+            android:name=".AddEvent"
+            android:label="AddEvent"
+            android:theme="@style/Theme.BloodyGoodGPA.NoActionBar" />
+        <activity
             android:name=".EditDelete"
             android:label="EditDelete"
             android:theme="@style/Theme.BloodyGoodGPA.NoActionBar"/>

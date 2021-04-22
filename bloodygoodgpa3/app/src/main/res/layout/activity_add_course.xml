@@ -11,13 +11,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/Theme.BloodyGoodGPA.AppBarOverlay"
+        android:backgroundTint="#eba398"
         tools:ignore="MissingConstraints">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="?attr/colorPrimary"
             app:popupTheme="@style/Theme.BloodyGoodGPA.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
@@ -63,6 +63,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="424dp"
         android:text="Add"
+        android:backgroundTint="#bf5849"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.312"

@@ -19,9 +19,9 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        back = (ImageButton) findViewById(R.id. imageButton);
-        NetID = (EditText) findViewById(R.id. NetID);
-        submit = (ImageButton) findViewById(R.id. send_NetID);
+        back = findViewById(R.id. imageButton);
+        NetID = findViewById(R.id. NetID);
+        submit = findViewById(R.id. send_NetID);
         container = ((BaseApp)getApplication()).container;
     }
     public void goBack(View view) {
@@ -29,6 +29,7 @@ public class Register extends AppCompatActivity {
     }
     public void register(View view) {
         container.user = NetID.getText().toString().toLowerCase().trim();
+        container.client.sendCode(container.user);
         startActivity(new Intent(this, RegisterCode.class));
     }
 }

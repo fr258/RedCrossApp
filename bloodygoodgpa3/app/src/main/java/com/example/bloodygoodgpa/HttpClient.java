@@ -266,6 +266,38 @@ public class HttpClient {
         return false;
     }
 
+    public void addEvent(String date, String description, String time, String zone, long dateInMillis) {
+        String query = queryBuilder("addEvent", 5);
+        ArrayList<String> headers = new ArrayList<>();
+        headers.add("args1="+date);
+        headers.add("args2="+description);
+        headers.add("args3="+time);
+        headers.add("args4="+zone);
+        headers.add("args5="+dateInMillis);
+        post(query, "", headers);
+    }
+
+    public ArrayList<String> getEventArray() {
+        String query = queryBuilder("getEventArray", 1);
+        ArrayList<String> headers = new ArrayList<>();
+        headers.add("args1="+"dummy");
+        ArrayList<String> retVal = (ArrayList<String>) get(query, headers);
+        if(retVal != null) return retVal;
+        return new ArrayList<>();
+    }
+
+    public void removeEvent(String event) {
+        String[] arr = event.split("\\|");
+        String timeInMillis = arr[0];
+        String description = arr[2];
+        String query = queryBuilder("removeEvent", 2);
+        ArrayList<String> headers = new ArrayList<>();
+        headers.add("args1="+timeInMillis);
+        headers.add("args2="+description);
+        delete(query, "", headers);
+    }
+
+
 
 
 }

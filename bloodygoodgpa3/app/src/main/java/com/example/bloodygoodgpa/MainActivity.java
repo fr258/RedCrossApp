@@ -11,11 +11,11 @@ import android.widget.Toast;
 import android.os.Handler;
 
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity {
 
-    Button login, register;
-    EditText Username, Password;
-    Container container;
+    private Button login, register;
+    private EditText Username, Password;
+    private Container container;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,33 +26,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         login = (Button) findViewById(R.id.login);
         register = (Button) findViewById(R.id.creating_new_user);
 
-        login.setOnClickListener(this);
-        register.setOnClickListener(this);
-
     }
-    @Override
-    public void onClick(View v) {
-        Container container =  ((BaseApp)getApplication()).container;
-        if (v.getId() == R.id.login) {
-            Boolean success = container.client.login(Username.getText().toString().trim().toLowerCase(), Password.getText().toString());
-            if (success==null) {
-                Toast.makeText(getApplicationContext(), "Failed to connect to network. Please check your connection and try again.", Toast.LENGTH_SHORT).show();
-            }
-            else if ((success!=null) && success) {
-                container.user = Username.getText().toString().trim().toLowerCase();
-                if(container.client.isAdmin(Username.getText().toString())) {
-                    startActivity(new Intent(this, Admin.class));
-                }
-                else {
-                    startActivity(new Intent(this, User.class));
-                }
+
+    public void login(View v) {
+        Boolean success = container.client.login(Username.getText().toString().trim().toLowerCase(), Password.getText().toString());
+        if (success==null) {
+            Toast.makeText(getApplicationContext(), "Failed to connect to network. Please check your connection and try again.", Toast.LENGTH_SHORT).show();
+        }
+        else if ((success!=null) && success) {
+            container.user = Username.getText().toString().trim().toLowerCase();
+            if(container.client.isAdmin(Username.getText().toString())) {
+                startActivity(new Intent(this, Admin.class));
             }
             else {
-                Toast.makeText(getApplicationContext(), "Incorrect Username or Password! Please try again.", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, User.class));
             }
         }
-        else{
-            startActivity(new Intent(this, Register.class));
+        else {
+            Toast.makeText(getApplicationContext(), "Incorrect Username or Password! Please try again.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void register(View v) {
+        startActivity(new Intent(this, Register.class));
     }
 }

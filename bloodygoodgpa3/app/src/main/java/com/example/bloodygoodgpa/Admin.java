@@ -3,12 +3,10 @@ package com.example.bloodygoodgpa;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.icu.util.Calendar;
 import android.os.Bundle;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,7 +15,6 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,10 +22,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class Admin extends AppCompatActivity implements View.OnClickListener{
+public class Admin extends AppCompatActivity{
 
-    CompactCalendarView compactCalendar;
+    private CompactCalendarView compactCalendar;
     private SimpleDateFormat dateFormatMonth = new SimpleDateFormat("MMMM- yyyy", Locale.getDefault());
+    private Container container;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,20 +35,22 @@ public class Admin extends AppCompatActivity implements View.OnClickListener{
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.back);
-        fab.setOnClickListener(this);
-
         final ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
+
+        container = ((BaseApp)getApplication()).container;
 
         ListView list = findViewById(R.id.event_list);
 
         compactCalendar = findViewById(R.id.compactcalendar_view);
         compactCalendar.showCalendarWithAnimation();
         compactCalendar.setUseThreeLetterAbbreviation(true);
-
-        Event ev1 = new Event(Color.BLUE,1617076800000L, "Test");
-        compactCalendar.addEvent(ev1);
+        ArrayList<String> eventsString = container.client.getEventArray();
+        ArrayList<Event> eventsConverted = new ArrayList<>();
+        for(String a: eventsString) {
+            eventsConverted.add(convert(a));
+        }
+        compactCalendar.addEvents(eventsConverted);
         Context currContext = getApplicationContext();
         compactCalendar.setListener(new CompactCalendarView.CompactCalendarViewListener() {
             @Override
@@ -75,17 +75,24 @@ public class Admin extends AppCompatActivity implements View.OnClickListener{
 
     }
 
-    private String formattedTime(long timeInMillis) {
-        long timeInDayInMinutes = timeInMillis%(24*60*60*1000)/(1000*60);
-        String minutes = String.format("%02d",(int)(timeInDayInMinutes%60));
-        int hoursMilitary = (int)(timeInDayInMinutes/24);
-        String hours = String.format("%02d",(int)((hoursMilitary+11)%12+1));
-        String period = (hoursMilitary < 11) ? "AM" : "PM";
-        return hours+":"+minutes+" "+period;
+    private Event convert(String event) {
+        String[] arr = event.split("\\|");
+        long timeInMillis = Long.parseLong(arr[0]);
+        String description = arr[2];
+        return new Event(Color.WHITE, timeInMillis, description);
     }
 
-    @Override
-    public void onClick(View v) {
+    private String formattedTime(long timeInMillis) {
+        Date temp = new Date(timeInMillis);
+        SimpleDateFormat dateFormatTime = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+        return dateFormatTime.format(temp);
+    }
+
+    public void goBack(View view) {
         startActivity(new Intent(this, MainActivity.class));
+    }
+
+    public void manageEvents(View view) {
+        startActivity(new Intent(this, ManageEvents.class));
     }
 }
